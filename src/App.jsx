@@ -11,20 +11,32 @@ function App() {
     projects: []
   });
 
-  function handleAddNewProject() {
+  const handleAddNewProject = () => {
     setAddProject(true);
   };
 
-  function handleCancel() {
+  const handleCancel = () => {
     setAddProject(false);
+  };
+
+  const handleSave = (title, description, dueDate) => {
+    const newProject = {
+      title,
+      description,
+      dueDate
+    };
+    setProjectsState(prev => {
+      const newState = { ...prev, projects: [newProject, ...prev.projects] }
+      return newState
+    });
   };
 
   return (
     <main className="h-screen my-8 flex gap-8">
-      <Sidebar 
+      <Sidebar
         onAddProject={handleAddNewProject}
       />
-      {addProject && <NewProject onCancel={handleCancel}/>}
+      {addProject && <NewProject onCancel={handleCancel} onSave={handleSave} />}
       {!addProject && !projectsState.selectedProjectId && <NoProjectSelected onAddProject={handleAddNewProject} />}
     </main>
   );
