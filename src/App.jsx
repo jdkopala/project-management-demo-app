@@ -3,20 +3,47 @@ import { useState } from 'react';
 import NewProject from "./components/NewProject";
 import Sidebar from "./components/Sidebar";
 import NoProjectSelected from './components/NoProjectSelected';
+import SelectedProject from './components/SelectedProject';
 
 function App() {
-  const [addProject, setAddProject] = useState(false);
   const [projectsState, setProjectsState] = useState({
-    selectedProjectId: undefined,
+    selectedProjectID: undefined,
+    selectedProject: undefined,
     projects: []
   });
 
   const handleAddNewProject = () => {
-    setAddProject(true);
+    setProjectsState((prev) => {
+      const newState = {
+        ...prev,
+        selectedProject: undefined,
+        selectedProjectID: -1
+      };
+      return newState;
+    })
   };
 
   const handleCancel = () => {
-    setAddProject(false);
+    setProjectsState((prev) => {
+      const newState = {
+        ...prev,
+        selectedProject: undefined,
+        selectedProjectID: undefined
+      };
+      return newState;
+    })
+  };
+
+  const handleSelectProject = (projectID) => {
+    const selectedProject = projectsState.projects.find((project) => project.id === projectID);
+    setProjectsState((prev) => {
+      const newState = {
+        ...prev,
+        selectedProject,
+        selectedProjectID: projectID
+      }
+      return newState;
+    })
   };
 
   const handleSave = (data) => {
@@ -27,23 +54,24 @@ function App() {
     setProjectsState(prev => {
       const newState = {
         ...prev,
-        selectedProjectId: undefined,
+        selectedProjectID: undefined,
+        selectedProject: undefined,
         projects: [...prev.projects, newProject]
       };
-      return newState
+      return newState;
     });
-    setAddProject(false)
-    console.log(projectsState.projects)
   };
 
   return (
     <main className="h-screen my-8 flex gap-8">
       <Sidebar
         onAddProject={handleAddNewProject}
+        onSelectProject={handleSelectProject}
         projects={projectsState.projects}
       />
-      {addProject && <NewProject onCancel={handleCancel} onSave={handleSave} />}
-      {!addProject && !projectsState.selectedProjectId && <NoProjectSelected onAddProject={handleAddNewProject} />}
+      {projectsState.selectedProjectID === undefined && <NoProjectSelected onAddProject={handleAddNewProject} />}
+      {projectsState.selectedProjectID < 0 && <NewProject onCancel={handleCancel} onSave={handleSave} />}
+      {projectsState.selectedProjectID >= 0 && projectsState.selectedProject && <SelectedProject project={projectsState.selectedProject} />}
     </main>
   );
 };

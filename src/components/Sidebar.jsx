@@ -1,10 +1,10 @@
 import Button from "./Button";
 
 export default function Sidebar(props) {
-  const { onAddProject, projects } = props
+  const { onAddProject, onSelectProject, projects } = props
 
-  const handleSelectProject = (id) => {
-    // TODO: Select a project and display it in the main window
+  const handleSelectProject = (projectID) => {
+    onSelectProject(projectID)
   };
 
   return (
