@@ -67,6 +67,7 @@ function App() {
       <Sidebar
         onAddProject={handleAddNewProject}
         onSelectProject={handleSelectProject}
+        selectedProjectID={projectsState.selectedProjectID}
         projects={projectsState.projects}
       />
       {projectsState.selectedProjectID === undefined && <NoProjectSelected onAddProject={handleAddNewProject} />}

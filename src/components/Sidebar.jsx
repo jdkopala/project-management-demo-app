@@ -1,7 +1,7 @@
 import Button from "./Button";
 
 export default function Sidebar(props) {
-  const { onAddProject, onSelectProject, projects } = props
+  const { onAddProject, onSelectProject, projects, selectedProjectID } = props
 
   const handleSelectProject = (projectID) => {
     onSelectProject(projectID)
@@ -13,12 +13,19 @@ export default function Sidebar(props) {
       <div>
         <Button label='+ New Project' onClick={onAddProject} />
       </div>
-      <ul className="mt-8">
+      <ul className='mt-8'>
         {projects.map(project => {
+          let classStr = 'w-full text-left px-2 py-1 rounded-sm my-1 hover:text-stone-200 hover:bg-stone-800 '
+          if (project.id === selectedProjectID) {
+            classStr += ' bg-stone-800 text-stone-200'
+          } else {
+            classStr += ' text-stone-400'
+          }
+
           return (
             <li key={project.id}>
               <button
-                className="w-full text-left px-2 py-1 rounded-sm my-1 text-stone-400 hover:text-stone-200 hover:bg-stone-800"
+                className={classStr}
                 onClick={() => handleSelectProject(project.id)}>
                 {project.title}
               </button>
