@@ -30,12 +30,12 @@ export default function NewProject(props) {
 
   return (
     <>
-      <Modal ref={modalRef} buttonCaption="Ok">
-        {/* TODO: Make this formatting more reusable */}
-        <h2 className="text-xl font-bold text-stone-800 my-4">Invalid Input</h2>
-        <p className="text-stone-700 mb-4">Looks like you forgot to enter a value.</p>
-        <p className="text-stone-700 mb-4">Provide a value for every field.</p>
-      </Modal>
+      <Modal
+        ref={modalRef}
+        title="Invalid Input"
+        desc="Looks like you forgot to enter a value. Provide a value for every field."
+        buttonCaption="Ok"
+      />
       <div className='w-[35rem] mt-16'>
         <menu className='flex items-center justify-end gap-4 my-4'>
           <li>
