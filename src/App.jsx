@@ -19,22 +19,28 @@ function App() {
     setAddProject(false);
   };
 
-  const handleSave = (title, description, dueDate) => {
+  const handleSave = (data) => {
     const newProject = {
-      title,
-      description,
-      dueDate
+      ...data,
+      id: projectsState.projects.length
     };
     setProjectsState(prev => {
-      const newState = { ...prev, projects: [newProject, ...prev.projects] }
+      const newState = {
+        ...prev,
+        selectedProjectId: undefined,
+        projects: [...prev.projects, newProject]
+      };
       return newState
     });
+    setAddProject(false)
+    console.log(projectsState.projects)
   };
 
   return (
     <main className="h-screen my-8 flex gap-8">
       <Sidebar
         onAddProject={handleAddNewProject}
+        projects={projectsState.projects}
       />
       {addProject && <NewProject onCancel={handleCancel} onSave={handleSave} />}
       {!addProject && !projectsState.selectedProjectId && <NoProjectSelected onAddProject={handleAddNewProject} />}

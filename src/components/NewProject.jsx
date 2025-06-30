@@ -15,7 +15,7 @@ export default function NewProject(props) {
 
     // TODO: Validate data
 
-    onSave(title, description, dueDate)
+    onSave({ title, description, dueDate })
   };
 
   return (
@@ -33,9 +33,9 @@ export default function NewProject(props) {
         </li>
       </menu>
       <div>
-        <Input ref={titleRef} label="Title" />
+        <Input ref={titleRef} type="text" label="Title" />
         <Input ref={descriptionRef} label="Description" textArea />
-        <Input ref={dateRef} label="Due Date" />
+        <Input ref={dateRef} type="date" label="Due Date" />
       </div>
     </div >
   )
