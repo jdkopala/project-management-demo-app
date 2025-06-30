@@ -8,7 +8,6 @@ import SelectedProject from './components/SelectedProject';
 function App() {
   const [projectsState, setProjectsState] = useState({
     selectedProjectID: undefined,
-    selectedProject: undefined,
     projects: []
   });
 
@@ -16,7 +15,6 @@ function App() {
     setProjectsState((prev) => {
       const newState = {
         ...prev,
-        selectedProject: undefined,
         selectedProjectID: -1
       };
       return newState;
@@ -27,7 +25,6 @@ function App() {
     setProjectsState((prev) => {
       const newState = {
         ...prev,
-        selectedProject: undefined,
         selectedProjectID: undefined
       };
       return newState;
@@ -35,11 +32,9 @@ function App() {
   };
 
   const handleSelectProject = (projectID) => {
-    const selectedProject = projectsState.projects.find((project) => project.id === projectID);
     setProjectsState((prev) => {
       const newState = {
         ...prev,
-        selectedProject,
         selectedProjectID: projectID
       }
       return newState;
@@ -55,12 +50,13 @@ function App() {
       const newState = {
         ...prev,
         selectedProjectID: newProject.id,
-        selectedProject: newProject,
         projects: [...prev.projects, newProject]
       };
       return newState;
     });
   };
+
+  const selectedProject = projectsState.projects.find((project) => project.id === projectsState.selectedProjectID) ?? undefined;
 
   return (
     <main className="h-screen my-8 flex gap-8">
@@ -72,7 +68,7 @@ function App() {
       />
       {projectsState.selectedProjectID === undefined && <NoProjectSelected onAddProject={handleAddNewProject} />}
       {projectsState.selectedProjectID < 0 && <NewProject onCancel={handleCancel} onSave={handleSave} />}
-      {projectsState.selectedProjectID >= 0 && projectsState.selectedProject && <SelectedProject project={projectsState.selectedProject} />}
+      {projectsState.selectedProjectID >= 0 && selectedProject && <SelectedProject project={selectedProject} />}
     </main>
   );
 };
