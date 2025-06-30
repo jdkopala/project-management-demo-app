@@ -13,7 +13,7 @@ export default function Sidebar(props) {
       <div>
         <Button label='+ New Project' onClick={onAddProject} />
       </div>
-      <ul>
+      <ul className="mt-8">
         {projects.map(project => {
           return (
             <li key={project.id}>
