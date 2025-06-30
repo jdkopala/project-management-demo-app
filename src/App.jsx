@@ -49,13 +49,13 @@ function App() {
   const handleSave = (data) => {
     const newProject = {
       ...data,
-      id: projectsState.projects.length
+      id: Math.random()
     };
     setProjectsState(prev => {
       const newState = {
         ...prev,
-        selectedProjectID: undefined,
-        selectedProject: undefined,
+        selectedProjectID: newProject.id,
+        selectedProject: newProject,
         projects: [...prev.projects, newProject]
       };
       return newState;
