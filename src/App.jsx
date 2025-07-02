@@ -56,15 +56,12 @@ function App() {
     });
   };
 
-  const handleDeleteProject = (id) => {
-    const removeProject = projectsState.projects.find((project) => project.id === id);
-    console.log('removeProject', removeProject)
+  const handleDeleteProject = () => {
+    const removeProject = projectsState.projects.find((project) => project.id === projectsState.selectedProjectID);
     if (removeProject) {
       const removeIdx = projectsState.projects.indexOf(removeProject);
-      console.log('idx', removeIdx);
       const newProjects = structuredClone(projectsState.projects);
       newProjects.splice(removeIdx, 1);
-      console.log('newProjects', newProjects)
       setProjectsState((prev) => {
         const newState = {
           ...prev,
