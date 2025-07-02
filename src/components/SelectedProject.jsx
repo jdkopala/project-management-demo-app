@@ -1,3 +1,5 @@
+import Tasks from './Tasks';
+
 export default function SelectedProject(props) {
   const { project, onDelete } = props;
   const { title, description, dueDate } = project;
@@ -18,7 +20,7 @@ export default function SelectedProject(props) {
         <p className="text-stone-400">Project Due: {dueDate}</p>
         <p className="text-stone-600 whitespace-pre-wrap">{description}</p>
       </header>
-      TASKS
+      <Tasks />
     </div>
   );
 };
