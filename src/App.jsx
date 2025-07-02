@@ -73,6 +73,24 @@ function App() {
     }
   };
 
+  const handleSaveTask = (newTask) => {
+    let selectedProject = projectsState.projects.find((project) => project.id === projectsState.selectedProjectID);
+    if (selectedProject) {
+      let selectedProjectCpy = structuredClone(projectsState.projects.find((project) => project.id === projectsState.selectedProjectID));
+      selectedProjectCpy.tasks = [...selectedProject.tasks, newTask];
+      const newProjects = structuredClone(projectsState.projects);
+      const replaceIdx = newProjects.indexOf(selectedProject);
+      newProjects[replaceIdx] = selectedProjectCpy;
+
+      setProjectsState((prev) => {
+        return {
+          ...prev,
+          projects: [...newProjects]
+        }
+      })
+    }
+  };
+
   const selectedProject = useMemo(() => {
     return projectsState.projects.find((project) => project.id === projectsState.selectedProjectID) ?? undefined
   }, [projectsState.selectedProjectID])
@@ -87,7 +105,7 @@ function App() {
       />
       {projectsState.selectedProjectID === undefined && <NoProjectSelected onAddProject={handleAddNewProject} />}
       {projectsState.selectedProjectID < 0 && <NewProject onCancel={handleCancel} onSave={handleSave} />}
-      {projectsState.selectedProjectID >= 0 && selectedProject && <SelectedProject project={selectedProject} onDelete={handleDeleteProject} />}
+      {projectsState.selectedProjectID >= 0 && selectedProject && <SelectedProject project={selectedProject} onDelete={handleDeleteProject} onSaveTask={handleSaveTask} />}
     </main>
   );
 };
