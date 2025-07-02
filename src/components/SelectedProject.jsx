@@ -1,7 +1,7 @@
 import Tasks from './Tasks';
 
 export default function SelectedProject(props) {
-  const { project, onDelete } = props;
+  const { project, tasks, onDelete, onSaveTask, onDeleteTask } = props;
   const { title, description, dueDate } = project;
 
   const formattedDate = new Date(dueDate).toLocaleDateString('en-US', {
@@ -17,10 +17,10 @@ export default function SelectedProject(props) {
           <h1 className="text-3xl font-bold text-stone-600 mb-2">{title}</h1>
           <button className='text-stone-600 hover:text-stone-950' onClick={onDelete}>Delete</button>
         </div>
-        <p className="text-stone-400">Project Due: {dueDate}</p>
+        <p className="text-stone-400">Project Due: {formattedDate}</p>
         <p className="text-stone-600 whitespace-pre-wrap">{description}</p>
       </header>
-      <Tasks />
+      <Tasks tasks={tasks} onSaveTask={onSaveTask} onDeleteTask={onDeleteTask} />
     </div>
   );
 };

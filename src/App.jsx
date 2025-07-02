@@ -8,7 +8,8 @@ import SelectedProject from './components/SelectedProject';
 function App() {
   const [projectsState, setProjectsState] = useState({
     selectedProjectID: undefined,
-    projects: []
+    projects: [],
+    tasks: []
   });
 
   const handleAddNewProject = () => {
@@ -18,7 +19,7 @@ function App() {
         selectedProjectID: -1
       };
       return newState;
-    })
+    });
   };
 
   const handleCancel = () => {
@@ -28,7 +29,7 @@ function App() {
         selectedProjectID: undefined
       };
       return newState;
-    })
+    });
   };
 
   const handleSelectProject = (projectID) => {
@@ -38,7 +39,7 @@ function App() {
         selectedProjectID: projectID
       }
       return newState;
-    })
+    });
   };
 
   const handleSave = (data) => {
@@ -51,7 +52,7 @@ function App() {
         ...prev,
         selectedProjectID: newProject.id,
         projects: [...prev.projects, newProject]
-      };
+      }
       return newState;
     });
   };
@@ -74,25 +75,29 @@ function App() {
   };
 
   const handleSaveTask = (newTask) => {
-    let selectedProject = projectsState.projects.find((project) => project.id === projectsState.selectedProjectID);
-    if (selectedProject) {
-      let selectedProjectCpy = structuredClone(projectsState.projects.find((project) => project.id === projectsState.selectedProjectID));
-      selectedProjectCpy.tasks = [...selectedProject.tasks, newTask];
-      const newProjects = structuredClone(projectsState.projects);
-      const replaceIdx = newProjects.indexOf(selectedProject);
-      newProjects[replaceIdx] = selectedProjectCpy;
+    const newTaskObj = {
+      text: newTask,
+      id: Math.round(Math.random() * 100),
+      projectID: projectsState.selectedProjectID
+    };
+    setProjectsState((prev) => {
+      return {
+        ...prev,
+        tasks: [newTaskObj, ...prev.tasks]
+      }
+    });
+  };
 
-      setProjectsState((prev) => {
-        return {
-          ...prev,
-          projects: [...newProjects]
-        }
-      })
-    }
+  const handleDeleteTask = (taskID) => {
+    // TODO: Delete tasks from projects
   };
 
   const selectedProject = useMemo(() => {
     return projectsState.projects.find((project) => project.id === projectsState.selectedProjectID) ?? undefined
+  }, [projectsState.selectedProjectID]);
+
+  const projectTasks = useMemo(() => {
+    return projectsState.tasks.filter((task) => task.projectID == projectsState.selectedProjectID) ?? []
   }, [projectsState.selectedProjectID])
 
   return (
@@ -105,7 +110,15 @@ function App() {
       />
       {projectsState.selectedProjectID === undefined && <NoProjectSelected onAddProject={handleAddNewProject} />}
       {projectsState.selectedProjectID < 0 && <NewProject onCancel={handleCancel} onSave={handleSave} />}
-      {projectsState.selectedProjectID >= 0 && selectedProject && <SelectedProject project={selectedProject} onDelete={handleDeleteProject} onSaveTask={handleSaveTask} />}
+      {projectsState.selectedProjectID >= 0 && selectedProject &&
+        <SelectedProject
+          project={selectedProject}
+          tasks={projectTasks}
+          onDelete={handleDeleteProject}
+          onSaveTask={handleSaveTask}
+          onDeleteTask={handleDeleteTask}
+        />
+      }
     </main>
   );
 };
