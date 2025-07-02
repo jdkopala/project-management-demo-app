@@ -7,7 +7,7 @@ export default function SelectedProject(props) {
   const formattedDate = new Date(dueDate).toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'short',
-    date: 'numeric'
+    day: 'numeric'
   });
 
   return (

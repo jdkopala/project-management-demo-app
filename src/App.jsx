@@ -58,6 +58,7 @@ function App() {
   };
 
   const handleDeleteProject = () => {
+    console.log('handle delete')
     const removeProject = projectsState.projects.find((project) => project.id === projectsState.selectedProjectID);
     if (removeProject) {
       const removeIdx = projectsState.projects.indexOf(removeProject);
@@ -75,6 +76,7 @@ function App() {
   };
 
   const handleSaveTask = (newTask) => {
+    console.log('saving tasks');
     const newTaskObj = {
       text: newTask,
       id: Math.round(Math.random() * 100),
@@ -86,10 +88,20 @@ function App() {
         tasks: [newTaskObj, ...prev.tasks]
       }
     });
+    console.log(projectsState.tasks)
   };
 
   const handleDeleteTask = (taskID) => {
-    // TODO: Delete tasks from projects
+    const newTasks = structuredClone(projectsState.tasks);
+    const deleteTask = newTasks.find((task) => task.id === taskID);
+    const removeIdx = newTasks.indexOf(deleteTask);
+    newTasks.splice(removeIdx, 1);
+    setProjectsState((prev) => {
+      return {
+        ...prev,
+        tasks: [...newTasks]
+      }
+    })
   };
 
   const selectedProject = useMemo(() => {
@@ -98,7 +110,7 @@ function App() {
 
   const projectTasks = useMemo(() => {
     return projectsState.tasks.filter((task) => task.projectID == projectsState.selectedProjectID) ?? []
-  }, [projectsState.selectedProjectID])
+  }, [projectsState.selectedProjectID, projectsState.tasks])
 
   return (
     <main className="h-screen my-8 flex gap-8">
