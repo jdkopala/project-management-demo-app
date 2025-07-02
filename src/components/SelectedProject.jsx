@@ -1,6 +1,6 @@
 export default function SelectedProject(props) {
-  const { project } = props;
-  const { title, description, dueDate } = project;
+  const { project, onDelete } = props;
+  const { id, title, description, dueDate } = project;
 
   const formattedDate = new Date(dueDate).toLocaleDateString('en-US', {
     year: 'numeric',
@@ -8,17 +8,22 @@ export default function SelectedProject(props) {
     date: 'numeric'
   });
 
+  const handleDelete = (id) => {
+    console.log('deleting project: ', id);
+    onDelete(id);
+  };
+
   return (
     <div className='w-[35rem] mt-16'>
       <header className="pb-4 border-b-2 border-stone-300">
         <div className="flex items-center justify-between">
           <h1 className="text-3xl font-bold text-stone-600 mb-2">{title}</h1>
-          <button className='text-stone-600 hover:text-stone-950'>Delete</button>
+          <button className='text-stone-600 hover:text-stone-950' onClick={() => handleDelete(id)}>Delete</button>
         </div>
-        <p className="text-stone-400">{dueDate}</p>
+        <p className="text-stone-400">Project Due: {dueDate}</p>
         <p className="text-stone-600 whitespace-pre-wrap">{description}</p>
       </header>
       TASKS
     </div>
-  )
+  );
 };
