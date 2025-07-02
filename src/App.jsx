@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 
 import NewProject from "./components/NewProject";
 import Sidebar from "./components/Sidebar";
@@ -44,9 +44,9 @@ function App() {
   const handleSave = (data) => {
     const newProject = {
       ...data,
-      id: Math.random()
+      id: Math.round(Math.random() * 100)
     };
-    setProjectsState(prev => {
+    setProjectsState((prev) => {
       const newState = {
         ...prev,
         selectedProjectID: newProject.id,
@@ -56,7 +56,29 @@ function App() {
     });
   };
 
-  const selectedProject = projectsState.projects.find((project) => project.id === projectsState.selectedProjectID) ?? undefined;
+  const handleDeleteProject = (id) => {
+    const removeProject = projectsState.projects.find((project) => project.id === id);
+    console.log('removeProject', removeProject)
+    if (removeProject) {
+      const removeIdx = projectsState.projects.indexOf(removeProject);
+      console.log('idx', removeIdx);
+      const newProjects = structuredClone(projectsState.projects);
+      newProjects.splice(removeIdx, 1);
+      console.log('newProjects', newProjects)
+      setProjectsState((prev) => {
+        const newState = {
+          ...prev,
+          selectedProjectID: undefined,
+          projects: [...newProjects]
+        };
+        return newState;
+      });
+    }
+  };
+
+  const selectedProject = useMemo(() => {
+    return projectsState.projects.find((project) => project.id === projectsState.selectedProjectID) ?? undefined
+  }, [projectsState.selectedProjectID])
 
   return (
     <main className="h-screen my-8 flex gap-8">
@@ -68,7 +90,7 @@ function App() {
       />
       {projectsState.selectedProjectID === undefined && <NoProjectSelected onAddProject={handleAddNewProject} />}
       {projectsState.selectedProjectID < 0 && <NewProject onCancel={handleCancel} onSave={handleSave} />}
-      {projectsState.selectedProjectID >= 0 && selectedProject && <SelectedProject project={selectedProject} />}
+      {projectsState.selectedProjectID >= 0 && selectedProject && <SelectedProject project={selectedProject} onDelete={handleDeleteProject} />}
     </main>
   );
 };
